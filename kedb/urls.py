@@ -18,9 +18,9 @@ router_api_v1 = routers.DefaultRouter()
 router_api_v1.register(r'known-errors', KnownErrorViewSet)
 
 urlpatterns = patterns('',
-    url(r'^v1/auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^v1/', include(router_api_v1.urls)),
+    url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/', include(router_api_v1.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
 
 ) + staticfiles_urlpatterns()
