@@ -7,6 +7,6 @@ from django.http import HttpResponseRedirect
 from kedb.models import KnownError
 
 class KnownErrorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'kind', 'uuid', "instance_small")
+    list_display = ('name', 'description', 'check', 'output_pattern')
 
 admin.site.register(KnownError, KnownErrorAdmin)
