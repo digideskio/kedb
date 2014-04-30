@@ -1,3 +1,4 @@
+
 import os
 
 from django.conf.urls.defaults import url, patterns, include
@@ -20,6 +21,6 @@ urlpatterns = patterns('',
     url(r'^v1/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^v1/', include(router_api_v1.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include(admin.site.urls)),
 
 ) + staticfiles_urlpatterns()
