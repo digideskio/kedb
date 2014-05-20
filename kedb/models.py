@@ -30,6 +30,14 @@ class KnownError(models.Model):
     level = models.CharField(max_length=55, verbose_name=_('level'), default='level1', choices=LEVEL_CHOICES)
     severity = models.CharField(max_length=55, verbose_name=_('severity'), default='medium', choices=SEVERITY_CHOICES)
 
+    @classmethod
+    def find_by_event(cls, check, output):
+        lookup = {
+            'a': 'b'
+        }
+        query = KnownError.objects.all()
+        return query
+
     class Meta:
         verbose_name = _("known error")
         verbose_name_plural = _("known errors")

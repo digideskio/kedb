@@ -29,5 +29,4 @@ urlpatterns = patterns('',
     url(r'^handle/', EventHandlerView.as_view(), name='handle_event'),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
-
 ) + staticfiles_urlpatterns()
