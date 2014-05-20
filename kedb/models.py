@@ -43,7 +43,7 @@ class KnownError(models.Model):
         verbose_name_plural = _("known errors")
 
 class Workaround(models.Model):
-    known_error = models.ForeignKey(KnownError, verbose_name=_('known error'))
+    known_error = models.ForeignKey(KnownError, verbose_name=_('known error'), related_name='workarounds')
     description = models.TextField(verbose_name=_('description'), blank=True)
     temporary = models.BooleanField(max_length=255, verbose_name=_('temporary'))
 

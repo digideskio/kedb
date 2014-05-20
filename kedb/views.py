@@ -13,7 +13,6 @@ log = logging.getLogger('kedb.views')
 from kedb.models import KnownError
 
 """
-
 payload from sensu handler
 
 {
@@ -54,7 +53,6 @@ payload from sensu handler
     }
   }"
 }
-
 """
 
 class EventHandlerView(ContextMixin, View):
@@ -63,6 +61,6 @@ class EventHandlerView(ContextMixin, View):
         log.debug(request.GET['level'])
         event = request.GET
         event['detail'] = json.load(event.pop('output'))
-        print event['detail']
-        error = KnownError.find_by_event(event['detail']['check']['name'], event['detail']['check']['output'])
-        return 'OK'
+        #print event['detail']
+#        error = KnownError.find_by_event(event['detail']['check']['name'], event['detail']['check']['output'])
+        return 'ok'
