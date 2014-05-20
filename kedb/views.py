@@ -5,6 +5,7 @@ from django import shortcuts
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import ContextMixin, View
+from django.http import HttpResponse
 
 import logging
 
@@ -57,10 +58,15 @@ payload from sensu handler
 
 class EventHandlerView(ContextMixin, View):
 
-    def get(self, request, *args, **kwargs):
-        log.debug(request.GET['level'])
-        event = request.GET
-        event['detail'] = json.load(event.pop('output'))
-        #print event['detail']
-#        error = KnownError.find_by_event(event['detail']['check']['name'], event['detail']['check']['output'])
-        return 'ok'
+    def post(self, request, *args, **kwargs):
+        event = json.loads(request.raw_post_data)['event']
+        error = KnownError.find_by_event(event['check']['name'], event['check']['output'])
+
+        if error == None:
+            event['known_error'] = False
+        else:
+            event['known_error'] = True
+            event['level'] = error.level
+            event['severity'] = error.severity
+
+        return HttpResponse(json.dumps(event))
