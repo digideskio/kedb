@@ -11,7 +11,9 @@ class WorkaroundErrorDetailSerializer(serializers.HyperlinkedModelSerializer):
 
 class WorkaroundSerializer(serializers.HyperlinkedModelSerializer):
 
-    error_detail = WorkaroundErrorDetailSerializer(many=False)
+    error_detail = WorkaroundErrorDetailSerializer(many=False, required=False)
+
+    known_error = serializers.PrimaryKeyRelatedField()
 
     class Meta:
         model = Workaround
