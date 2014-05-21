@@ -61,6 +61,10 @@ class Workaround(models.Model):
     engine = models.CharField(max_length=255, verbose_name=_('engine'), default='salt', choices=ENGINE_CHOICES)
     action = models.TextField(verbose_name=_('description'), blank=True)
 
+    @property
+    def error_detail(self):
+        return self.known_error
+
     class Meta:
         verbose_name = _("workaround")
         verbose_name_plural = _("workarounds")
