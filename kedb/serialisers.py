@@ -15,4 +15,4 @@ class KnownErrorSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = KnownError
-        fields = ('id', 'name', 'description', 'check', 'output_pattern', 'level', 'severity', 'workarounds')
+        fields = ('id', 'name', 'description', 'check', 'output_pattern', 'level', 'severity', 'ownership', 'workarounds')
