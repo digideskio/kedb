@@ -4,7 +4,7 @@ from rest_framework import serializers
 from kedb.models import KnownError, Workaround
 
 class WorkaroundErrorDetailSerializer(serializers.HyperlinkedModelSerializer):
-	"""nejde reference primo na sebe coz je skoda"""
+    """nejde reference primo na sebe coz je skoda"""
     class Meta:
         model = KnownError
         fields = ('id', 'name', 'description', 'check', 'output_pattern', 'level', 'severity', 'ownership')
