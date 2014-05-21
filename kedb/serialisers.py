@@ -7,7 +7,7 @@ class WorkaroundSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Workaround
-        fields = ('id', 'known_error', 'description', 'temporary')
+        fields = ('id', 'known_error', 'description', 'temporary', 'engine', 'action')
 
 class KnownErrorSerializer(serializers.HyperlinkedModelSerializer):
 
