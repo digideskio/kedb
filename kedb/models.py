@@ -20,6 +20,11 @@ SEVERITY_CHOICES = (
     ("high", u"high"),
 )
 
+OWNERSHIP_CHOICES = (
+    ("cloudlab", u"Cloudlab"),
+    ("network", u"network"),
+)
+
 class KnownError(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('name'))
     description = models.TextField(verbose_name=_('description'), blank=True)
@@ -27,6 +32,7 @@ class KnownError(models.Model):
     output_pattern = models.CharField(max_length=255, verbose_name=_('output pattern'))
     level = models.CharField(max_length=55, verbose_name=_('level'), default='level1', choices=LEVEL_CHOICES)
     severity = models.CharField(max_length=55, verbose_name=_('severity'), default='medium', choices=SEVERITY_CHOICES)
+    ownership = models.CharField(max_length=55, verbose_name=_('ownership'), default='cloudlab', choices=OWNERSHIP_CHOICES)
 
     @classmethod
     def find_by_event(cls, check, output):
