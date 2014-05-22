@@ -41,14 +41,12 @@ class KnownError(models.Model):
 
     @classmethod
     def find_by_event(cls, check, output):
-        lookup = {
-            'a': 'b'
-        }
-        try:
-            instance = KnownError.objects.all()[0]
-        except:
-            instance = None
-        return instance
+        instances = KnownError.objects.filter(check=check)
+        final_instance = None
+        for instance in instances:
+            if output.startswith(instance.output_pattern):
+                final_instance = instance
+        return final_instance
 
     class Meta:
         verbose_name = _("known error")
