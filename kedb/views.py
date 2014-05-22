@@ -85,8 +85,7 @@ class EventHandlerView(ContextMixin, View):
     def post(self, request, *args, **kwargs):
         event = json.loads(request.raw_post_data)['event']
         
-        output = _find_by_event(event['check']['name'], event['check']['output'])
-        event.join(output)
+        event.update(_find_by_event(event['check']['name'], event['check']['output']))
 
         return HttpResponse(json.dumps(event))
 
@@ -95,8 +94,7 @@ class EventDetailView(ContextMixin, View):
     def post(self, request, *args, **kwargs):
         event = json.loads(request.raw_post_data)['event']
 
-        output = _find_by_event(event['check'], event['output'])
-        event.join(output)
+        event.update(_find_by_event(event['check'], event['output']))
 
         return HttpResponse(json.dumps(event))
 
@@ -107,12 +105,11 @@ class EventListView(ContextMixin, View):
 
     def post(self, request, *args, **kwargs):
         events = json.loads(request.raw_post_data)['events']
-        output_list = []
+        output = []
 
         for event in events:
 
-            output = _find_by_event(event['check'], event['output'])
-            event.join(output)
-            output_list.append(event)
+            event.update(_find_by_event(event['check'], event['output']))
+            output.append(event)
 
-        return HttpResponse(json.dumps(output_list))
+        return HttpResponse(json.dumps(output))
