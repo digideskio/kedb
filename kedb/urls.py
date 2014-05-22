@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router_api_v1.urls)),
     url(r'^handle/', csrf_exempt(EventHandlerView.as_view()), name='handle_event'),
-    url(r'^event-list/', csrf_exempt(EventListView.as_view()), name='event_list'),
+    url(r'^api/event-list/', csrf_exempt(EventListView.as_view()), name='event_list'),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ) + staticfiles_urlpatterns()
