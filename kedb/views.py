@@ -70,3 +70,26 @@ class EventHandlerView(ContextMixin, View):
             event['severity'] = error.severity
 
         return HttpResponse(json.dumps(event))
+
+class EventListView(ContextMixin, View):
+
+    def get(self, request, *args, **kwargs):
+      return self.post(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        events = json.loads(request.raw_post_data)['events']
+        output = []
+
+        for event in events:
+            error = KnownError.find_by_event(event['check'], event['output'])
+
+            if error == None:
+                event['known_error'] = False
+            else:
+                event['known_error'] = True
+                event['level'] = error.level
+                event['severity'] = error.severity
+
+            output.append(event)
+
+        return HttpResponse(json.dumps(output))
