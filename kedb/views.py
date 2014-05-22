@@ -54,20 +54,49 @@ payload from sensu handler
     }
   }"
 }
+
+{"event": {"action": "create", "client": {"name": "sensu1.state.newt.cz", "subscriptions": ["local-salt-minion", "sensu1-state-newt-cz", "local-common"],
+ "timestamp": 1400743301, "system": "state_base", "graphite_name": "sensu1_state_newt_cz", "address": "10.0.2.15"}, 
+ "check": {"customer": "customer01", "status": 2, "executed": 1400743305, "name": "remote_keystone_api", "handlers": ["default"], "issued": 1400743305, "interval": 60, 
+ "command": "PATH=$PATH:/srv/sensu/checks python check_http_json.py -H 10.0.102.20:5000 -p v2.0", "occurrences": 1, "subscribers": ["remote-network"], 
+ "duration": 0.021999999999999999, "output": "python: can't open file 'check_http_json.py': [Errno 2] No such file or directory\n", 
+ "history": ["2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2"], "asset": "asset01"}, 
+ "occurrences": 2485}}
 """
+
+def _find_by_event(check, output):
+
+        error = KnownError.find_by_event(check, output)
+        event = {}
+
+        if error == None:
+            event['known_error'] = False
+            event['error_name'] = 'Unknown error'
+        else:
+            event['known_error'] = True
+            event['error_name'] = error.name
+            event['level'] = error.level
+            event['severity'] = error.severity
+
+        return event
 
 class EventHandlerView(ContextMixin, View):
 
     def post(self, request, *args, **kwargs):
         event = json.loads(request.raw_post_data)['event']
-        error = KnownError.find_by_event(event['check']['name'], event['check']['output'])
+        
+        output = _find_by_event(event['check']['name'], event['check']['output'])
+        event.join(output)
 
-        if error == None:
-            event['known_error'] = False
-        else:
-            event['known_error'] = True
-            event['level'] = error.level
-            event['severity'] = error.severity
+        return HttpResponse(json.dumps(event))
+
+class EventDetailView(ContextMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        event = json.loads(request.raw_post_data)['event']
+
+        output = _find_by_event(event['check'], event['output'])
+        event.join(output)
 
         return HttpResponse(json.dumps(event))
 
@@ -78,18 +107,12 @@ class EventListView(ContextMixin, View):
 
     def post(self, request, *args, **kwargs):
         events = json.loads(request.raw_post_data)['events']
-        output = []
+        output_list = []
 
         for event in events:
-            error = KnownError.find_by_event(event['check'], event['output'])
 
-            if error == None:
-                event['known_error'] = False
-            else:
-                event['known_error'] = True
-                event['level'] = error.level
-                event['severity'] = error.severity
+            output = _find_by_event(event['check'], event['output'])
+            event.join(output)
+            output_list.append(event)
 
-            output.append(event)
-
-        return HttpResponse(json.dumps(output))
+        return HttpResponse(json.dumps(output_list))
