@@ -44,7 +44,7 @@ class KnownError(models.Model):
         instances = KnownError.objects.filter(check=check)
         final_instance = None
         for instance in instances:
-            if output.startswith(instance.output_pattern):
+            if instance.output_pattern.find(output):
                 final_instance = instance
         return final_instance
 
