@@ -77,6 +77,7 @@ def _find_by_event(check, output):
             event['error_name'] = error.name
             event['level'] = error.level
             event['severity'] = error.severity
+            event['error_id'] = error.id
 
         return event
 
