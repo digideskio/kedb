@@ -40,13 +40,28 @@ class KnownError(models.Model):
     severity = models.CharField(max_length=55, verbose_name=_('severity'), default='medium', choices=SEVERITY_CHOICES)
     ownership = models.CharField(max_length=55, verbose_name=_('ownership'), default='cloudlab', choices=OWNERSHIP_CHOICES)
 
+    @staticmethod
+    def reg(string, IGNORECASE=True):
+        """warpper for compile regular"""
+        reg = None
+        try:
+            if IGNORECASE:
+                reg = re.compile(string, re.IGNORECASE)
+            else:
+                reg = re.compile(string)
+        except Exception, e:
+            raise e
+        return reg
+
     @classmethod
     def find_by_event(cls, check, output):
         instances = KnownError.objects.filter(check=check)
         final_instance = None
         for instance in instances:
-            if len(re.findall(output_pattern, output)) > 0:
-                final_instance = instance
+            reg = KnownError.reg(instance.output_pattern)
+            if reg:
+                if len(reg.findall(output)) > 0:
+                    final_instance = instance
         return final_instance
 
     class Meta:
