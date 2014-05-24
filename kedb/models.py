@@ -1,3 +1,4 @@
+
 import os
 import re
 from datetime import datetime
@@ -44,7 +45,7 @@ class KnownError(models.Model):
         instances = KnownError.objects.filter(check=check)
         final_instance = None
         for instance in instances:
-            if instance.output_pattern.find(output):
+            if len(re.findall(output_pattern, output)) > 0:
                 final_instance = instance
         return final_instance
 
