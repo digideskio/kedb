@@ -23,7 +23,8 @@ SEVERITY_CHOICES = (
 
 OWNERSHIP_CHOICES = (
     ("cloudlab", u"Cloudlab"),
-    ("network", u"network"),
+    ("network", u"Network"),
+    ("hardware", u"Hardware"),
 )
 
 ENGINE_CHOICES = (
