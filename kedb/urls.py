@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, routers
 from kedb.models import KnownError, Workaround
-from kedb.views import EventHandlerView, EventListView
+from kedb.views import EventHandlerView, EventListView, EventDetailView
 from kedb.serialisers import KnownErrorSerializer, WorkaroundSerializer
 
 admin.autodiscover()
@@ -26,6 +26,7 @@ router_api_v1.register(r'workarounds', WorkaroundViewSet)
 
 urlpatterns = patterns('',
     url(r'^api/events/', csrf_exempt(EventListView.as_view()), name='event_list'),
+    url(r'^api/events/detail/', csrf_exempt(EventDetailView.as_view()), name='event_detail'),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router_api_v1.urls)),
     url(r'^handle/', csrf_exempt(EventHandlerView.as_view()), name='handle_event'),

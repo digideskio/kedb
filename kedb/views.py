@@ -6,12 +6,13 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import ContextMixin, View
 from django.http import HttpResponse
-
+from django.forms.models import model_to_dict
 import logging
 
 log = logging.getLogger('kedb.views')
 
-from kedb.models import KnownError
+from kedb.models import KnownError, Workaround
+from kedb.serialisers import WorkaroundSerializer
 
 """
 payload from sensu handler
@@ -75,9 +76,15 @@ def _find_by_event(check, output):
         else:
             event['known_error'] = True
             event['error_name'] = error.name
+            event['description'] = error.description
             event['level'] = error.level
             event['severity'] = error.severity
             event['error_id'] = error.id
+            _workarounds = []
+            workarounds = Workaround.objects.filter( known_error = error )
+            for workaround in workarounds:
+                _workarounds.append(json.dumps(model_to_dict(workaround)))
+            event['workarounds'] = _workarounds
 
         return event
 
@@ -92,9 +99,12 @@ class EventHandlerView(ContextMixin, View):
 
 class EventDetailView(ContextMixin, View):
 
+    def get(self, request, *args, **kwargs):
+      return self.post(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         event = json.loads(request.raw_post_data)['event']
-
+        
         event.update(_find_by_event(event['check'], event['output']))
 
         return HttpResponse(json.dumps(event))
