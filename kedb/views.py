@@ -75,13 +75,6 @@ def _find_by_event(check, output):
             event['error_name'] = 'Unknown error'
         else:
             event['known_error'] = True
-            """
-            _workarounds = []
-            workarounds = Workaround.objects.filter( known_error = error )
-            for workaround in workarounds:
-                _workarounds.append(model_to_dict(workaround))
-            event['workarounds'] = json.dumps(_workarounds)
-            """
             serializer = KnownErrorSerializer(error)
             event['error_name'] = error.name
             event['description'] = error.description
