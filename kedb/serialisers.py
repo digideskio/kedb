@@ -7,17 +7,17 @@ class WorkaroundErrorDetailSerializer(serializers.HyperlinkedModelSerializer):
     """nejde reference primo na sebe coz je skoda"""
     class Meta:
         model = KnownError
-        fields = ('id', 'name', 'description', 'check', 'output_pattern', 'level', 'severity', 'ownership')
+        fields = ('name', 'description')
 
 class WorkaroundSerializer(serializers.HyperlinkedModelSerializer):
 
-    #error_detail = WorkaroundErrorDetailSerializer(many=False, required=False)
+    error_detail = WorkaroundErrorDetailSerializer(many=False, required=False)
 
     known_error = serializers.PrimaryKeyRelatedField()
 
     class Meta:
         model = Workaround
-        fields = ('id', 'known_error', 'description', 'temporary', 'engine', 'action')
+        fields = ('id', 'known_error', 'description', 'temporary', 'engine', 'action', 'error_detail')
 
 class KnownErrorSerializer(serializers.HyperlinkedModelSerializer):
 
