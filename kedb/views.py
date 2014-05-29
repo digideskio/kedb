@@ -12,7 +12,7 @@ import logging
 log = logging.getLogger('kedb.views')
 
 from kedb.models import KnownError, Workaround
-from kedb.serialisers import WorkaroundSerializer
+from kedb.serialisers import WorkaroundSerializer, KnownErrorSerializer
 
 """
 payload from sensu handler
@@ -75,17 +75,20 @@ def _find_by_event(check, output):
             event['error_name'] = 'Unknown error'
         else:
             event['known_error'] = True
+            """
+            _workarounds = []
+            workarounds = Workaround.objects.filter( known_error = error )
+            for workaround in workarounds:
+                _workarounds.append(model_to_dict(workaround))
+            event['workarounds'] = json.dumps(_workarounds)
+            """
+            serializer = KnownErrorSerializer(error)
             event['error_name'] = error.name
             event['description'] = error.description
             event['level'] = error.level
             event['severity'] = error.severity
             event['error_id'] = error.id
-            _workarounds = []
-            workarounds = Workaround.objects.filter( known_error = error )
-            for workaround in workarounds:
-                _workarounds.append(json.dumps(model_to_dict(workaround)))
-            event['workarounds'] = _workarounds
-
+            event['workarounds'] = serializer.data.get("workarounds")
         return event
 
 class EventHandlerView(ContextMixin, View):
