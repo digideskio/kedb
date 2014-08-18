@@ -30,6 +30,7 @@ OWNERSHIP_CHOICES = (
 ENGINE_CHOICES = (
     ("salt", u"Salt call"),
     ("jenkins", u"Jenkins job"),
+    ("misc", u"Misc"),
 )
 
 class KnownError(models.Model):
