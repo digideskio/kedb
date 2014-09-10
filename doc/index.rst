@@ -1,7 +1,7 @@
-Welcome to Billometer's documentation!
+Django-based kedb middleware.!
 ======================================
 
-**Billometer is OpenStack billing service**
+**Django-based kedb middleware.**
 
 
 Contents:

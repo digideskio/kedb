@@ -1,4 +1,0 @@
-
-# KEDB
-
-Known Error DataBase
