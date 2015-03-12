@@ -65,58 +65,66 @@ payload from sensu handler
  "occurrences": 2485}}
 """
 
-def _find_by_event(check, output):
 
-        error = KnownError.find_by_event(check, output)
-        event = {}
+def _find_by_event(check, output=None):
 
-        if error == None:
-            event['known_error'] = False
-            event['error_name'] = 'Unknown error'
-        else:
-            event['known_error'] = True
-            serializer = KnownErrorSerializer(error)
-            event['error_name'] = error.name
-            event['description'] = error.description
-            event['level'] = error.level
-            event['severity'] = error.severity
-            event['error_id'] = error.id
-            event['workarounds'] = serializer.data.get("workarounds")
-        return event
+    error = KnownError.find_by_event(check, output or check["output"])
+    event = {}
+
+    if error == None:
+        event['known_error'] = False
+        event['error_name'] = 'Unknown error'
+    else:
+        event['known_error'] = True
+        serializer = KnownErrorSerializer(error)
+        event['error_name'] = error.name
+        event['description'] = error.description
+        event['level'] = error.level
+        event['severity'] = error.severity
+        event['error_id'] = error.id
+        event['workarounds'] = serializer.data.get("workarounds")
+    return event
+
 
 class EventHandlerView(ContextMixin, View):
 
     def post(self, request, *args, **kwargs):
         event = json.loads(request.raw_post_data)['event']
-        
-        event.update(_find_by_event(event['check']['name'], event['check']['output']))
+
+        event.update(
+            _find_by_event(event['check']['name'], event['check']['output']))
 
         return HttpResponse(json.dumps(event))
+
 
 class EventDetailView(ContextMixin, View):
 
     def get(self, request, *args, **kwargs):
-      return self.post(request, *args, **kwargs)
+        return self.post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         event = json.loads(request.raw_post_data)['event']
-        
-        event.update(_find_by_event(event['check'], event['output']))
+
+        event.update(_find_by_event(event['check']))
 
         return HttpResponse(json.dumps(event))
+
 
 class EventListView(ContextMixin, View):
 
     def get(self, request, *args, **kwargs):
-      return self.post(request, *args, **kwargs)
+        return self.post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        events = json.loads(request.raw_post_data)['events']
+
         output = []
 
-        for event in events:
-
-            event.update(_find_by_event(event['check'], event['output']))
-            output.append(event)
+        try:
+            events = json.loads(request.raw_post_data)['events']
+            for event in events:
+                event.update(_find_by_event(event["check"]))
+                output.append(event)
+        except Exception as e:
+            log.error(str(e))
 
         return HttpResponse(json.dumps(output))
