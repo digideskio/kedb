@@ -71,7 +71,7 @@ def _find_by_event(check, output=None):
     error = KnownError.find_by_event(check, output or check["output"])
     event = {}
 
-    if error == None:
+    if error is None:
         event['known_error'] = False
         event['error_name'] = 'Unknown error'
     else:
@@ -105,7 +105,7 @@ class EventDetailView(ContextMixin, View):
     def post(self, request, *args, **kwargs):
         event = json.loads(request.raw_post_data)['event']
 
-        event.update(_find_by_event(event['check']))
+        event.update(_find_by_event(event['check']['name']))
 
         return HttpResponse(json.dumps(event))
 
@@ -122,7 +122,7 @@ class EventListView(ContextMixin, View):
         try:
             events = json.loads(request.raw_post_data)['events']
             for event in events:
-                event.update(_find_by_event(event["check"]))
+                event.update(_find_by_event(event["check"]['name']))
                 output.append(event)
         except Exception as e:
             log.error(str(e))
