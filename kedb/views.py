@@ -68,7 +68,7 @@ payload from sensu handler
 
 def _find_by_event(check, output=None):
 
-    error = KnownError.find_by_event(check, output or check["output"])
+    error = KnownError.find_by_event(check['name'], output or check["output"])
     event = {}
 
     if error is None:
@@ -122,7 +122,7 @@ class EventListView(ContextMixin, View):
         try:
             events = json.loads(request.raw_post_data)['events']
             for event in events:
-                event.update(_find_by_event(event["check"]['name']))
+                event.update(_find_by_event(event["check"]))
                 output.append(event)
         except Exception as e:
             log.error(str(e))
