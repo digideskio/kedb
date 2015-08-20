@@ -33,33 +33,31 @@ ENGINE_CHOICES = (
     ("misc", u"Misc"),
 )
 
+
 class KnownError(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('name'))
     description = models.TextField(verbose_name=_('description'), blank=True)
     check = models.CharField(max_length=255, verbose_name=_('sensu check'),)
     output_pattern = models.CharField(max_length=255, verbose_name=_('output pattern'))
-    level = models.CharField(max_length=55, verbose_name=_('level'), default='level1', choices=LEVEL_CHOICES)
-    severity = models.CharField(max_length=55, verbose_name=_('severity'), default='medium', choices=SEVERITY_CHOICES)
-    ownership = models.CharField(max_length=55, verbose_name=_('ownership'), default='cloudlab', choices=OWNERSHIP_CHOICES)
-
-    @classmethod
-    def find_by_event(cls, check, output):
-        instances = KnownError.objects.filter(check=check)
-        final_instance = None
-        for instance in instances:
-            if len(re.findall(instance.output_pattern, output)) > 0:
-                final_instance = instance
-        return final_instance
+    level = models.CharField(
+        max_length=55, verbose_name=_('level'), default='level1', choices=LEVEL_CHOICES)
+    severity = models.CharField(
+        max_length=55, verbose_name=_('severity'), default='medium', choices=SEVERITY_CHOICES)
+    ownership = models.CharField(
+        max_length=55, verbose_name=_('ownership'), default='cloudlab', choices=OWNERSHIP_CHOICES)
 
     class Meta:
         verbose_name = _("known error")
         verbose_name_plural = _("known errors")
 
+
 class Workaround(models.Model):
-    known_error = models.ForeignKey(KnownError, verbose_name=_('known error'), related_name='workarounds')
+    known_error = models.ForeignKey(
+        KnownError, verbose_name=_('known error'), related_name='workarounds')
     description = models.TextField(verbose_name=_('description'), blank=True)
     temporary = models.BooleanField(max_length=255, verbose_name=_('temporary'))
-    engine = models.CharField(max_length=255, verbose_name=_('engine'), default='salt', choices=ENGINE_CHOICES)
+    engine = models.CharField(
+        max_length=255, verbose_name=_('engine'), default='salt', choices=ENGINE_CHOICES)
     action = models.TextField(verbose_name=_('description'), blank=True)
 
     @property
