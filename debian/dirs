@@ -1,0 +1,4 @@
+var/log/kedb
+var/lib/kedb/static
+var/lib/kedb/media
+etc/kedb/templates

@@ -1,0 +1,13 @@
+Source: kedb
+Maintainer: Michael Kuty <michael.kuty@tcpcloud.eu>
+Section: web
+Priority: optional
+Build-Depends: debhelper (>= 9), python, python-dev, python-virtualenv, dh-virtualenv (>= 0.9), dh-python, python-setuptools, libpq-dev, libyaml-dev
+Standards-Version: 3.9.1
+X-Python-Version: >= 2.7
+
+Package: kedb
+Architecture: any
+Pre-Depends: dpkg (>= 1.16.1), python, python-yaml, ${misc:Pre-Depends}, debconf, libpq5
+Depends: ${misc:Depends}, ${python:Depends}
+Description: Simple Django based Known Error Database with API and integration to Sensu
