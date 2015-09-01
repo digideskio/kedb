@@ -23,6 +23,8 @@ setup(name='django-kedb',
       license='BSD License',
       platforms=['OS Independent'],
       packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+      include_package_data=True,
+      install_requires=install_requires,
       classifiers=[
           'Development Status :: 1 - Alpha',
           'Environment :: Web Environment',
