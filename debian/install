@@ -1,0 +1,3 @@
+bin/manage.py     usr/lib/kedb/bin/
+bin/gunicorn_start.sh     usr/lib/kedb/bin/
+#templates/*   usr/share/kedb/templates
