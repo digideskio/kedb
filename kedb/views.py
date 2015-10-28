@@ -12,7 +12,7 @@ log = logging.getLogger('kedb.views')
 class EventHandlerView(ContextMixin, View):
 
     def post(self, request, *args, **kwargs):
-        event = json.loads(request.raw_post_data)['event']
+        event = json.loads(request.body)['event']
 
         event.update(
             find_by_event(event['check']['name'], event['check']['output']))
@@ -26,7 +26,7 @@ class EventDetailView(ContextMixin, View):
         return self.post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        event = json.loads(request.raw_post_data)['event']
+        event = json.loads(request.body)['event']
 
         event.update(find_by_event(event['check']['name']))
 
@@ -43,7 +43,7 @@ class EventListView(ContextMixin, View):
         output = []
 
         try:
-            events = json.loads(request.raw_post_data)['events']
+            events = json.loads(request.body)['events']
             for event in events:
                 event.update(find_by_event(event["check"]))
                 output.append(event)
