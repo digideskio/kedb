@@ -1,0 +1,7 @@
+include LICENSE
+include MANIFEST.in
+include README.rst
+recursive-include kedb/static *
+recursive-include kedb/locale *
+recursive-include kedb/templates *
+recursive-include bin *
