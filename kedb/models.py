@@ -38,7 +38,8 @@ class KnownError(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('name'))
     description = models.TextField(verbose_name=_('description'), blank=True)
     check = models.CharField(max_length=255, verbose_name=_('sensu check'),)
-    output_pattern = models.CharField(max_length=255, verbose_name=_('output pattern'))
+    output_pattern = models.CharField(
+        max_length=255, verbose_name=_('output pattern'))
     level = models.CharField(
         max_length=55, verbose_name=_('level'), default='level1', choices=LEVEL_CHOICES)
     severity = models.CharField(
@@ -55,7 +56,8 @@ class Workaround(models.Model):
     known_error = models.ForeignKey(
         KnownError, verbose_name=_('known error'), related_name='workarounds')
     description = models.TextField(verbose_name=_('description'), blank=True)
-    temporary = models.BooleanField(max_length=255, verbose_name=_('temporary'))
+    temporary = models.BooleanField(
+        max_length=255, verbose_name=_('temporary'))
     engine = models.CharField(
         max_length=255, verbose_name=_('engine'), default='salt', choices=ENGINE_CHOICES)
     action = models.TextField(verbose_name=_('description'), blank=True)

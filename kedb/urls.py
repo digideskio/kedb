@@ -12,12 +12,12 @@ admin.autodiscover()
 
 
 class KnownErrorViewSet(viewsets.ModelViewSet):
-    model = KnownError
+    queryset = KnownError.objects.all()
     serializer_class = KnownErrorSerializer
 
 
 class WorkaroundViewSet(viewsets.ModelViewSet):
-    model = Workaround
+    queryset = Workaround.objects.all()
     serializer_class = WorkaroundSerializer
 
 router_api_v1 = routers.DefaultRouter()

@@ -67,7 +67,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.staticfiles',
-    'south',
     'rest_framework',
     'kedb',
 )
